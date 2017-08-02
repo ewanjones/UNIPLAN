@@ -5,7 +5,14 @@ Created on Wed Aug  2 18:27:20 2017
 """
 
 import pandas as pd
+import modules
+import CONFIG
+
 
 columns = ['Date', 'Start', 'End', 'Module', 'Venue', 'Title']
+timetable = pd.DataFrame(columns=columns)
 
-timetable = pd.DataFram(columns=columns)
+def add_event():
+    pass
+
+
