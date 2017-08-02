@@ -39,15 +39,6 @@ class Module():
             self.grade = grade
 
 
-# Test data
-BMS381 = Module('BMS381', 20, 'Practical')
-BMS381.add_component('essay', 50, 'essay')
-BMS381.add_component('exam', 50, 'exam')
-BMS381.component['essay'].grade = 67
-BMS381.component['exam'].grade = 76
-BMS381.valid_comps()
-
-
 # =============================================================================
 #  MODULE CREATION
 # =============================================================================

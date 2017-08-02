@@ -8,14 +8,7 @@ import modules
 import CONFIG
 import pandas as pd
 
-TOTAL_CREDITS = 120
-THRESHOLDS = {'1st': 70,
-              '2:1': 60,
-              '2:2': 50,
-              '3rd': 40,
-              'Pass': 30,
-              'Fail': 0}
-
+## TEST DATA
 BMS381 = Module('BMS381', 20, 'Practical')
 BMS381.add_component('essay', 50, 'essay')
 BMS381.add_component('exam', 50, 'exam')
@@ -25,6 +18,7 @@ BMS381.valid_comps()
 
 module_list = {'BMS381': BMS381}
 
+# Printing table of data
 columns = ['Module', 'Component', 'Weight', 'Grade']
 df = pd.DataFrame(columns=columns)
 
