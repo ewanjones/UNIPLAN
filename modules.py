@@ -4,6 +4,12 @@
 Created on Tue Aug  1 23:52:21 2017
 """
 
+#Imports sqlite and sets up the connection
+import sqlite3
+
+file = 'modules.db'
+conn = sqlite3.connect(file)
+c = conn.cursor()
 
 class Module():
     '''Module objects store all components in dictionary of objects. They can be
@@ -15,6 +21,15 @@ class Module():
         self.name = name
         self.credit = credit
         self.category = category
+
+        '''Using SQL syntax. if within the modules databse, there is not a table with the name provided
+        then one is made and the credit and category are provided'''
+        c.execute('''CREATE TABLE IF NOT EXISTS {} (credit INTEGER, category TEXT);'''.format(self.name))
+        c.execute('''INSERT INTO {} (credit, category) VALUES (?,?)'''.format(self.name), (self.credit, self.category,))
+
+        #This is just testing that it worked - returning the data
+        c.execute('''SELECT credit, category FROM {}'''.format(self.name))
+        print(c.fetchall()[0])
 
     def add_component(self, name, weight, category):
             self.component[name] = self.Component(name, weight, category)
@@ -44,6 +59,19 @@ class Module():
 # =============================================================================
 
 
+module_list={}
+
 def create_module(name, credit, category):
     module_list[name] = Module(name, credit, category)
 
+
+# Just tesing it with values - on my editor I can't actually input values
+#example_name = input("Enter the module name: ")
+#example_credit = input("Enter module credits: ")
+#example_category = input("Enter module category: ")
+
+example_name = 'PHY250'
+example_credit = 25
+example_category = 'Exam'
+
+create_module(example_name, example_credit, example_category)
