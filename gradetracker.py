@@ -5,6 +5,7 @@ GRADE TRACKER
 """
 
 import modules
+import CONFIG
 import pandas as pd
 
 TOTAL_CREDITS = 120
@@ -64,7 +65,5 @@ def calc_year_score():
 
 def calc_year_grade():
     year_score = calc_year_score()
-    
-    if
         
 print(calc_year_score())
