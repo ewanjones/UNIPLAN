@@ -4,12 +4,13 @@
 Created on Tue Aug  1 23:52:21 2017
 """
 
-#Imports sqlite and sets up the connection
+# Imports sqlite and sets up the connection
 import sqlite3
 
-file = 'modules.db'
+file = 'database.db'
 conn = sqlite3.connect(file)
 c = conn.cursor()
+
 
 class Module():
     '''Module objects store all components in dictionary of objects. They can be
@@ -18,17 +19,36 @@ class Module():
     component = {}
 
     def __init__(self, name, credit, category):
-        self.name = name
+        self.name = name.lower()
         self.credit = credit
         self.category = category
 
-        '''Using SQL syntax. if within the modules databse, there is not a table with the name provided
-        then one is made and the credit and category are provided'''
-        c.execute('''CREATE TABLE IF NOT EXISTS {} (credit INTEGER, category TEXT);'''.format(self.name))
-        c.execute('''INSERT INTO {} (credit, category) VALUES (?,?)'''.format(self.name), (self.credit, self.category,))
+        c.execute('''SELECT name
+                     FROM Modules
+                     WHERE
+                        name = ?
+                     GROUP BY
+                        Name''',
+                 (self.name,)
+        )
+
+        msg = c.fetchone()
+
+        if msg:
+            # module_exists()
+            print("Module already exists - function here to ask if they want to replace it / look at it / do nothing?")
+
+
+        else:
+            c.execute('''INSERT INTO Modules values (?,?,?)''', (self.name, self.credit, self.category))
+            conn.commit()
+
+
 
         #This is just testing that it worked - returning the data
-        c.execute('''SELECT credit, category FROM {}'''.format(self.name))
+        c.execute('''SELECT credits, category
+                     FROM Modules
+                     WHERE name = ?''',(self.name,))
         print(c.fetchall()[0])
 
     def add_component(self, name, weight, category):
