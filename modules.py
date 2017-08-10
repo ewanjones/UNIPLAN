@@ -62,7 +62,7 @@ class Module():
                         module''', (self.module,))
 
         total = c.fetchone()[0]
-        print(str(total) + "%")
+        print("Total component weighting: " + str(total) + "%")
         # weighting = 0
         # for comp in self.component:
         #     weighting += self.component[comp].weight
