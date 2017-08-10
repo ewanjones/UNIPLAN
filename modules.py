@@ -13,10 +13,10 @@ c = conn.cursor()
 
 class Module():
 
-    def __init__(self, module, credit, category):
+    def __init__(self, module, credit, name):
         self.module = module.lower()
         self.credit = credit
-        self.category = category
+        self.name = name
 
         c.execute('''SELECT module
                      FROM Modules
@@ -25,33 +25,27 @@ class Module():
                  (self.module,)
         )
 
-        msg = c.fetchone()
-
-        if msg:
-            # module_exists()
+        if c.fetchone():
             print("Module already exists - function here to ask if they want to replace it / look at it / do nothing?")
-
+            return None
 
         else:
-            c.execute('''INSERT INTO Modules values (?,?,?)''', (self.module, self.credit, self.category))
+            c.execute('''INSERT INTO Modules values (?,?,?)''',
+                         (self.module, self.credit, self.name))
             conn.commit()
 
+    def add_component(self, name, category, weight, grade=200):
+        c.execute('''INSERT INTO Components values (?,?,?,?,?)''',
+                     (self.module, name, category, weight, grade,))
+        conn.commit()
 
-
-        #This is just testing that it worked - returning the data
-        c.execute('''SELECT credits, category
-                     FROM Modules
-                     WHERE module = ?''',(self.module,))
-        print(c.fetchall()[0])
-
-    def add_component(self, name, weight, category):
-            c.execute('''INSERT INTO Components values (?,?,?,?)''', (self.module, name, weight, category,))
-            conn.commit()
-
-            c.execute('''SELECT *
-                         FROM Components
-                         WHERE module = ?''', (self.module,))
-            print(c.fetchall())
+    def get_current_grade(self):
+        c.execute('''SELECT
+                        round(sum(1.0 * (grade * weight) / 100), 2)
+                     FROM Components
+                     WHERE
+                        module = ?''', (self.module,))
+        return [c.fetchone()[0], self.check_comps()]
 
     def check_comps(self):
         c.execute('''SELECT sum(weight)
@@ -60,14 +54,8 @@ class Module():
                         module = ?
                      GROUP BY
                         module''', (self.module,))
+        return c.fetchone()[0]
 
-        total = c.fetchone()[0]
-        print("Total component weighting: " + str(total) + "%")
-        # weighting = 0
-        # for comp in self.component:
-        #     weighting += self.component[comp].weight
-        # if weighting != 100:
-        #     raise ValueError('The component weightings do not add up to 100%.')
 
 
 # =============================================================================
@@ -82,7 +70,7 @@ def create_module(module, credit, category):
 
 
 #example_name = input("Enter the module name: ")
-example_name = 'PHY250'
+example_name = 'PHY250'.lower()
 #example_credit = input("Enter module credits: ")
 example_credit = 25
 #example_category = input("Enter module category: ")
@@ -94,5 +82,11 @@ example_category = 'Exam'
 
 create_module(example_name, example_credit, example_category)
 
-# module_list[example_name].add_component('Class Test 1', 80, 'Exam')
-module_list[example_name].check_comps()
+# module_list[example_name].add_component('Essay', 'Coursework', 20, 72)
+# module_list[example_name].add_component('Homework 1', 'Homework', 5, 92)
+# module_list[example_name].add_component('Homework 2', 'Homework', 5, 90)
+
+numbers = module_list[example_name].get_current_grade()
+print(example_name.upper(), "current grade: " + str(numbers[0]) + "%\n"
+        "Out of an available: " + str(numbers[1]) + "%\n"
+        "Average mark: " + str(round(numbers[0] / numbers[1] * 100, 2)) + "%")
