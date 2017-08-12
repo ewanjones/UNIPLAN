@@ -6,6 +6,9 @@ filename = 'database.sql'
 conn = sqlite3.connect(filename)
 c = conn.cursor()
 
+# ----------------
+# TABLES (INIT)
+# ----------------
 
 def create_tables():
     c.execute('''CREATE TABLE IF NOT EXISTS modules
@@ -16,7 +19,8 @@ def create_tables():
                      classification REAL)''')
 
     c.execute('''CREATE TABLE IF NOT EXISTS components
-                    (code TEXT, 
+                    (comp_ID INTEGER PRIMARY KEY,
+                     code TEXT, 
                      name TEXT, 
                      weight REAL, 
                      category TEXT, 
@@ -24,7 +28,8 @@ def create_tables():
                      classification TEXT)''')
 
     c.execute('''CREATE TABLE IF NOT EXISTS timetable
-                    (date DATE, 
+                    (event_ID INTEGER PRIMARY KEY,
+                     date DATE, 
                      start_time TIME, 
                      end_time TIME, 
                      code TEXT, 
@@ -33,6 +38,9 @@ def create_tables():
     conn.commit()
 
 
+# ----------------
+# MODULES
+# ----------------
 
 def add_module(code, name, credits, grade=None, classification=None):
     try:
@@ -58,13 +66,17 @@ def edit_module(search, code=None, name=None, credits=None, grade=None, classifi
 
 
 def del_module(code):
-    c.execute('''DELETE FROM modules WHERE code=:code''', {'code': code})
+    c.execute('''DELETE FROM modules WHERE code=:code AND ''', {'code': code})
     conn.commit()
 
 
-def add_component(code, name, category, weight, grade=None, classification=None):
+# ----------------
+# COMPONENTS
+# ----------------
+
+def add_component(code, name, weight, category, grade=None, classification=None):
     try:
-        c.execute('''INSERT INTO modules VALUES (:code, :name, :category, :grade, :classification)''',
+        c.execute('''INSERT INTO components VALUES (:code, :name, :weight, :category, :grade, :classification)''',
                   {'code': code,
                    'name': name,
                    'weight': weight,
@@ -75,6 +87,28 @@ def add_component(code, name, category, weight, grade=None, classification=None)
     except:
         print('There is already a component with that name.')
 
+
+def edit_component(search, code=None, name=None, weight=None, category=None, grade=None, classification=None):
+    current = c.execute('''SELECT * FROM components WHERE code=:search''', {'search':search}).fetchall()  # Current values
+    args = [code, name, weight, category, grade, classification]  # Updated values
+    params = tuple([item if item else current[0][i] for i, item in enumerate(args)])  # Create tuple of combined
+    params += (search,)
+
+    # Update module in SQL
+    query = '''UPDATE components
+                SET code=?, name=?, weight=?, category=?, grade=?, classification=?
+                WHERE code=?'''
+    c.execute(query, params)
+    conn.commit()
+
+
+def del_component(code, category):
+    c.execute('''DELETE FROM components WHERE code=:code AND category=:category''', {'code': code, 'category': category})
+    conn.commit()
+
+# ----------------
+# VALIDATION
+# ----------------
 
 def check_valid():
     # Check the total credits add up to CONFIG.TOTAL_CREDITS
