@@ -8,56 +8,70 @@ import modules
 import CONFIG
 import pandas as pd
 
-## TEST DATA
-BMS381 = Module('BMS381', 20, 'Practical')
-BMS381.add_component('essay', 50, 'essay')
-BMS381.add_component('exam', 50, 'exam')
-BMS381.component['essay'].grade = 67
-BMS381.component['exam'].grade = 76
-BMS381.valid_comps()
+import sqlite3
 
-module_list = {'BMS381': BMS381}
+file = 'database.sql'
+conn = sqlite3.connect(file)
+c = conn.cursor()
+
 
 # Printing table of data
-columns = ['Module', 'Component', 'Weight', 'Grade']
-df = pd.DataFrame(columns=columns)
+columns = ['Module', 'Component Name', 'Weight', 'Grade']
 
-for module in module_list:
-    components = module_list[module].component
-    for comp in components:
-        grade = components[comp].grade
-        weight = components[comp].weight
+components = c.execute('''SELECT code, name, weight, grade
+                          FROM Components''').fetchall()
 
-        data = [module, comp, weight, grade]
-        df.loc[len(df)] = data
-
+df = pd.DataFrame(data=components, columns=columns)
 print(df)
 
+def check_comps(module):
+    c.execute('''SELECT sum(weight)
+                 FROM Components
+                 WHERE
+                    code = ?
+                    AND
+                    grade IS NOT NULL''', (module,))
+    return c.fetchone()[0]
 
+# Currently returns list. Index 0 = average%, Index 1 = max% (from components completed).
+# [90, 100] = 90/100 = 90%, [20, 50] = 20/50 = 40%
 def calc_module_score(module):
-    comps = module.component
-    module_score = 0
-
-    for item in comps:
-        weight = comps[item].weight
-        grade = comps[item].grade
-        module_score += grade / 100 * weight
-
-    return module_score
+    c.execute('''SELECT
+                    round(sum(1.0 * (grade * weight) / 100), 2)
+                 FROM Components
+                 WHERE
+                    code = ?
+                    AND
+                    grade IS NOT null''', (module,))
+    return [c.fetchone()[0], check_comps(module)]
 
 
 def calc_year_score():
-    year_score = 0 
-    
-    for module in module_list:
-        mod_score = calc_module_score(module_list[module])
-        year_score += mod_score / TOTAL_CREDITS * module_list[module].credit
-    
-    year_score = round(year_score, 2) 
-    return year_score
+    modules = c.execute('''SELECT code
+                           FROM modules'''
+                       ).fetchall()
+
+    modules_list = {}
+    for module in modules:
+        numbers = calc_module_score(module[0])
+        modules_list[module[0]] = [numbers[0], numbers[1], c.execute('''SELECT credits
+                                                                        FROM modules
+                                                                        WHERE
+                                                                            code = ?''', (module[0],)).fetchone()[0]]
+    current = 0
+    total_credits = 0
+    for key,value in modules_list.items():
+        current += value[0] * value[1] * value[2] / 10000
+        total_credits += value[2]
+    print("You have " + str(current) + "% out of an available " + str(total_credits*100 / 120) + "%")
 
 
 def calc_year_grade():
     year_score = calc_year_score()
-        
+
+
+
 print(calc_year_score())
+print(calc_module_score('phy250'))
+
+
