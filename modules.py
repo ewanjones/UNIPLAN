@@ -12,28 +12,27 @@ c = conn.cursor()
 
 def create_tables():
     c.execute('''CREATE TABLE IF NOT EXISTS modules
-                    (code TEXT NOT NULL PRIMARY KEY, 
-                     name TEXT, 
-                     credits REAL, 
-                     grade REAL, 
+                    (code TEXT NOT NULL PRIMARY KEY,
+                     name TEXT,
+                     credits REAL,
+                     grade REAL,
                      classification REAL)''')
 
     c.execute('''CREATE TABLE IF NOT EXISTS components
-                    (comp_ID INTEGER PRIMARY KEY,
-                     code TEXT, 
-                     name TEXT, 
-                     weight REAL, 
-                     category TEXT, 
-                     grade REAL, 
+                    (code TEXT,
+                     name TEXT,
+                     weight REAL,
+                     category TEXT,
+                     grade REAL,
                      classification TEXT)''')
 
     c.execute('''CREATE TABLE IF NOT EXISTS timetable
                     (event_ID INTEGER PRIMARY KEY,
-                     date DATE, 
-                     start_time TIME, 
-                     end_time TIME, 
-                     code TEXT, 
-                     name TEXT, 
+                     date DATE,
+                     start_time TIME,
+                     end_time TIME,
+                     code TEXT,
+                     name TEXT,
                      credits REAL)''')
     conn.commit()
 
@@ -132,5 +131,22 @@ def check_valid():
 
     return True
 
-
-create_tables()
+# create_tables()
+# add_module('phy250', 'Phys250', 25)
+# add_component('phy250', 'final', 100, 'exam', 90)
+# add_module('phy251', 'Phys251', 25)
+# add_component('phy251', 'final', 100, 'exam', 80)
+# add_module('phy201', '1', 10)
+# add_component('phy201', 'final', 100, 'exam', 70)
+# add_module('phy202', '2', 10)
+# add_component('phy202', 'final', 100, 'exam', 60)
+# add_module('phy203', '3', 10)
+# add_component('phy203', 'final', 100, 'exam', 50)
+# add_module('phy204', '4', 10)
+# add_component('phy204', 'final', 100, 'exam', 40)
+# add_module('phy205', '5', 10)
+# add_component('phy205', 'final', 100, 'exam', 55)
+# add_module('phy206', '6', 10)
+# add_component('phy206', 'final', 100, 'exam', 65)
+# add_module('phy207', '7', 10)
+# add_component('phy207', 'final', 100, 'exam', 75)
