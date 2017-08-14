@@ -1,0 +1,141 @@
+* {
+    font-family: Calibri;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+.container-main {
+    margin-top: 50px;
+    background-color: cream;
+    height:100%;
+    display: flex;
+}
+
+.container-fluid {
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+  background-color: blue;
+
+}
+
+.row {
+  width: 100%
+  margin-right: -15px;
+  margin-left: -15px;
+  display: flex;
+  height: 20px;
+}
+
+
+/* ---------------
+ COLUMN STRUCTURE
+--------------- */
+
+.column1 {
+    flex: 1
+}
+
+.column2 {
+    flex: 2
+}
+
+
+/* ------------
+ NAV ELEMENTS
+--------------- */
+
+.navbar {
+    width: 100%;
+    height: 50px;
+    padding: 2px;
+    background-color: #204060;
+    position: fixed;
+    top: 0;
+    display: flex;
+    z-index: 1000;
+}
+
+.navbar-brand {
+  float: left;
+  height: 100%;
+  display:flex;
+  padding-left: 15px;
+}
+
+.navbar-brand p { /* COMPANY NAME */
+    margin: auto;
+    color: #FFF;
+    font-size: 24px
+}
+
+.navbar-right {
+    flex: 1;
+    margin-left: auto;
+    height: 100%;
+    padding-right: 15px;
+}
+
+.navbar-item {
+    height: 100%;
+    margin: auto;
+    display: flex;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.navbar-right > .navbar-item {
+    float: right;
+}
+
+.navbar-item a {
+    margin: auto;
+    color: #FFF;
+    text-decoration: none;
+}
+
+
+/* ------------
+  SIDEBAR
+--------------- */
+
+.sidebar {
+    height: 100%;
+    width: 150px;
+    background-color: #2d5986;
+    position: fixed;
+    z-index: 1000
+}
+
+.sidebar-item {
+    height: 40px;
+    width: 100%;
+    display: flex;
+    padding: 5px 15px;
+}
+
+.sidebar-item a {
+    margin: auto 0;
+    color: white;
+    text-decoration: none;
+}
+
+
+/* ------------
+  MAIN WINDOW
+--------------- */
+
+.window {
+    background-color: #ffffe6;
+    z-index: 900;
+    flex: 1;
+    margin-left: 150px;
+    padding: 5px 20px;
+}

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="../static/css/style.css" rel="stylesheet" type="text/css">
+
+    <title>**TEST**</title>
+
+  </head>
+
+  <body>
+
+    <div class="navbar">
+        <div class="navbar-brand">
+            <p>UNIPLAN</p>
+        </div>
+
+        <div class="navbar-right">
+            <div class="navbar-item">
+                <a href="#">Account</a>
+            </div>
+            <div class="navbar-item">
+                <a href="#">Settings</a>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="container-main">
+
+        <!-- SIDEBAR -->
+        <div class="sidebar">
+            <div class="sidebar-item">
+                <a href="#">DASHBOARD</a>
+            </div>
+            <div class="sidebar-item">
+                <a href="#">MODULES</a>
+            </div>
+            <div class="sidebar-item">
+                <a href="#">TIMETABLE</a>
+            </div>
+            <div class="sidebar-item">
+                <a href="#">GRADES</a>
+            </div>
+        </div>
+
+
+        <!-- MAIN WINDOW -->
+        <div class="window">
+            <h1>Module Add</h1>
+            <form action="/action_page.php">
+                Module name:<br>
+                <input type="text" name="name" value="">
+                <br><br>
+
+                Credits:<br>
+                <input type="text" name="credits" value="">
+                <br><br>
+
+                Grade (optional):<br>
+                <input type="text" name="grade" value="">
+                <br><br>
+
+                Classification (optional):<br>
+                <input type="text" name="classification" value="">
+
+                <br><br>
+                <input type="submit" value="Submit">
+            </form>
+        </div>
+
+
+    </div>
+
+  </body>
