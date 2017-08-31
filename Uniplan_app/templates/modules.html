@@ -1,0 +1,22 @@
+{% extends "template.html" %}
+{% block window %}
+
+    <h1 class="page-header">Modules</h1>
+
+    <h1>Add modules</h1>
+    <div class="container">
+    	<form class="form-inline" method="post" action="">
+    		
+    		<input class="form-control" type="text" placeholder="Code" value="{{ request.form.code }}">
+
+    		<input class="form-control" type="text" placeholder="Name" value="{{ request.form.name }}">
+
+    		<input class="form-control" type="text" placeholder="Credits" value="{{ request.form.credits }}">
+
+    		<input class="form-control" type="text" placeholder="Grade (if applicable)" value="{{ request.form.grade }}">
+
+    	</form>
+    </div>
+
+
+{% endblock %}
